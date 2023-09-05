@@ -1,0 +1,65 @@
+public class MyQueue {
+    private Object[] array;
+    private int front;
+    private int rear;
+    private int size;
+    private static final int DEFAULT_CAPACITY = 10;
+
+    public MyQueue() {
+        array = new Object[DEFAULT_CAPACITY];
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+
+    public void add(Object value) {
+        if (size == array.length) {
+            resize();
+        }
+        rear = (rear + 1) % array.length;
+        array[rear] = value;
+        size++;
+    }
+
+    public void clear() {
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public Object peek() {
+        if (isEmpty()) {
+            throw new IllegalStateException("Queue is empty");
+        }
+        return array[front];
+    }
+
+    public Object poll() {
+        if (isEmpty()) {
+            throw new IllegalStateException("Queue is empty");
+        }
+        Object data = array[front];
+        front = (front + 1) % array.length;
+        size--;
+        return data;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    private void resize() {
+        int newCapacity = array.length * 2;
+        Object[] newArray = new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
+            newArray[i] = array[(front + i) % array.length];
+        }
+        array = newArray;
+        front = 0;
+        rear = size - 1;
+    }
+}
